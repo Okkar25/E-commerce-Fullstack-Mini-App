@@ -1,0 +1,24 @@
+{
+  "cSpell.words": [
+    "Aung",
+    "autoincrement",
+    "CACELLED",
+    "CANCELELD",
+    "clickaway",
+    "ecommerce",
+    "Miko",
+    "Noti",
+    "Okkar",
+    "Orderline",
+    "orderlines",
+    "OUTFORDELIVERY",
+    "reduxjs",
+    "squamate",
+    "Swal",
+    "sweetalert",
+    "tookit"
+  ],
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
+}

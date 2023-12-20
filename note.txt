@@ -1,0 +1,271 @@
+  // => cartSlice.ts 
+  
+  export const confirmOrder = createAsyncThunk(
+  "cart/confirmOrder",
+  async (payload: CartItem[], thunkApi) => {
+    const response = await fetch(`${config.apiBaseUrl}/order`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    // const data = await response.json();
+    // return data;
+    return response;
+    // thunkApi.dispatch();
+  }
+);
+
+  // => pages > cart > index.tsx 
+  
+  const handleConfirmOrder = async () => {
+    const response = await dispatch(confirmOrder(cartItems)); // async
+    const dataFromServer = await (response.payload as unknown as Response).json();
+
+    // console.log(response);
+    // router.push(`/confirmation`);
+    // dispatch(clearOutCart());
+    console.log(dataFromServer);
+  };
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+export const createOrder = createAsyncThunk(
+  "cart/createOrder",
+  async (options: CreateOrderOptions, thunkApi) => {
+    const response = await fetch(`${config.apiBaseUrl}/order`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(options.payload), // CreateOrderPayload.payload
+    });
+
+    // const data = await response.json();
+    // return data;
+    return response;
+    // thunkApi.dispatch();
+  }
+);
+
+------------------------------------------------------------------------------------------
+
+url 
+
+https://www.okkaraung2001.com/identity/information?age=22&hairColor=black 
+
+protocol                            - https://
+subdomain                           - www.
+domain                              - okkaraung2001
+TLD (top level domain)              - .com
+/identity                           - slug / subfolder 
+/information?age=22&hairColor=black - parameter 
+
+https://localhost:3000/menu?key=value&key=value
+
+https://localhost:3000/confirmation?orderId=1&status=ordered
+
+
+type checking 
+
+const OrderConfirmation = () => {
+  const router = useRouter();
+  const { orderId, status } = router.query;
+  const dispatch = useAppDispatch();
+
+  const handleCancelOrder = () => {
+    const id = orderId as string;
+    dispatch(cancelOrder({ orderId: id }));
+  };
+}
+
+const OrderConfirmation = () => {
+  const router = useRouter();
+  const orderId  = router.query.orderId as string;
+  const { status } = router.query;
+  const dispatch = useAppDispatch();
+
+  const handleCancelOrder = () => {
+    dispatch(cancelOrder({ orderId }));
+  };
+}
+
+export interface CancelOrderOptions extends BaseOption {
+  orderId: string | string[] | undefined;
+}
+
+
+
+=========================================================================================================================
+
+
+
+https://next-auth.js.org/
+
+npm install next-auth
+
+https://next-auth.js.org/providers/google
+
+configuration =>
+
+For production: https://{YOUR_DOMAIN}/api/auth/callback/google
+For development: http://localhost:3000/api/auth/callback/google
+
+create project => name project 
+
+create credentials => OAuth Client ID 
+
+configure consent screen 
+
+user type => External => create 
+
+
+--> fill out app information 
+
+name => E-commerce-Mini-Auth name 
+
+add emails 
+
+save and continue 
+
+scopes => save and continue
+
+test users => save and continue
+
+back to dashboard 
+
+
+
+=> at OAuth Consent Screen 
+
+=> Credentials => create credentials => OAuth Client ID 
+
+application type => web application 
+
+
+**** Authorised redirect URIs => added http://localhost:3000/api/auth/callback/google => Create ****
+
+https://next-auth.js.org/providers/google 
+Configuration 
+
+For production: https://{YOUR_DOMAIN}/api/auth/callback/google
+For development: http://localhost:3000/api/auth/callback/google <= 
+
+--- acquired --- 
+Client ID
+Client Secret  
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+api > auth > [...nextauth].ts  => folder / file created 
+
+
+.env 
+
+GOOGLE_CLIENT_ID = 4255992722-gkcoouripap0sjafetg8gmb020htjp4c.apps.googleusercontent.com
+
+GOOGLE_CLIENT_SECRET = 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
+
+utils > config 
+
+interface Config {
+  apiBaseUrl: string;
+  googleClientId: string;
+  googleClientSecret: string;
+}
+
+export const config: Config = {
+  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+};
+
+
+auth > nextauth 
+
+import { config } from "@/utils/config";
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+export const authOptions = {
+  // Configure one or more authentication providers
+  providers: [
+    GoogleProvider({
+      clientId: config.googleClientId,
+      clientSecret: config.googleClientSecret,
+    }),
+    // ...add more providers here
+  ],
+};
+
+export default NextAuth(authOptions);
+
+
+_app.ts 
+
+import { store } from "@/store";
+import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
+import { Provider } from "react-redux";
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <SessionProvider>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </SessionProvider>
+  );
+}
+
+
+..........................................................................................
+
+
+hook => useSession 
+
+The useSession() React Hook in the NextAuth.js client is the easiest way to check if someone is signed in.
+
+// reference this code // 
+
+const student = {
+  name: "Okkar Aung",
+  age: 22,
+  gender: "male",
+  RS: false,
+};
+
+const { name: myName } = student;
+console.log(myName);
+
+
+------------------------------------------------------------------------------------------
+
+
+
+
+features to be added 
+
+sorting according to categories (home page) 
+
+
+#done
+
+avatar profile photo => can only be accessed via public folder 
+pagination (in cart) 
+login form 
+cancel order notification (cancel order page)
+products loading skeletons 
+rating 
+order status (ordered --> out for delivery) => use tabs 
+
+
+
+
+
+https://www.cryptool.org/en/cto/openssl
+openssl rand -base64 32
+
+NEXTAUTH_SECRET
